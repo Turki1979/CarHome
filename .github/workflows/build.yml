@@ -12,9 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Unzip project
-        run: unzip -o carhome.zip -d carhome
+      - name: Unzip latest uploaded zip
+        run: |
+          f=$(git log -1 --name-only --pretty=format: -- '*.zip' | grep -v '^$' | head -1)
+          echo "Using: $f"
+          unzip -o "$f" -d carhome
 
       - uses: actions/setup-java@v4
         with:
